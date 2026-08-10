@@ -1,0 +1,58 @@
+name: pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Pages artifact
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Install Rust and WebAssembly target
+        run: |
+          rustup toolchain install 1.95.0 --profile minimal --no-self-update
+          rustup target add wasm32-unknown-unknown --toolchain 1.95.0
+
+      - name: Install wasm-pack
+        run: cargo +1.95.0 install wasm-pack --version 0.15.0 --locked
+
+      - name: Build reviewed distribution
+        env:
+          RUSTUP_TOOLCHAIN: 1.95.0
+        run: bash scripts/build_web.sh
+
+      - name: Upload Pages source artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: jwt-inspector-pages-${{ github.run_id }}
+          path: dist
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 1
+
+  deploy:
+    name: Deploy Pages
+    needs: build
+    uses: Tinkora/.github/.github/workflows/reusable-pages.yml@af8ae92c2083c55283187be0d6a1ffba7740df86
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    with:
+      source-artifact-name: jwt-inspector-pages-${{ github.run_id }}
+      source-subdirectory: .

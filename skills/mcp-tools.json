@@ -1,0 +1,80 @@
+{
+  "name": "jwt_inspector",
+  "version": "0.1.0",
+  "description": "Browser-native JWT inspector. Parse header and payload, check expiry, and optionally verify HS256/RS256 signatures. All computation in WASM — keys never leave the browser.",
+  "tools": [
+    {
+      "name": "parse_jwt",
+      "description": "Decode a JWT token's header and payload without verifying the signature. Returns the decoded header, claims set, and signature.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "The JWT token string (header.payload.signature format)."
+          }
+        },
+        "required": ["token"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "check_expiry",
+      "description": "Check whether a JWT token is expired. Returns expiry status, time to expiry, and human-readable expiry time.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "The JWT token string."
+          },
+          "leeway_seconds": {
+            "type": "integer",
+            "default": 0,
+            "description": "Clock skew tolerance in seconds."
+          }
+        },
+        "required": ["token"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "verify_hs256",
+      "description": "Verify a JWT's HS256 (HMAC-SHA256) signature using a shared secret key. All verification runs locally in WASM.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "The JWT token string."
+          },
+          "secret": {
+            "type": "string",
+            "description": "The shared secret key used to sign the token."
+          }
+        },
+        "required": ["token", "secret"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "verify_rs256",
+      "description": "Verify a JWT's RS256 (RSA-SHA256) signature using a PEM-encoded RSA public key. All verification runs locally in WASM.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "The JWT token string."
+          },
+          "public_key_pem": {
+            "type": "string",
+            "description": "PEM-encoded RSA public key (-----BEGIN PUBLIC KEY----- ... -----END PUBLIC KEY-----)."
+          }
+        },
+        "required": ["token", "public_key_pem"],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

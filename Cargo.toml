@@ -1,0 +1,27 @@
+[workspace]
+members = ["crates/jwt_inspector_core", "crates/jwt_inspector_web"]
+resolver = "3"
+
+[workspace.package]
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/Tinkora/jwt_inspector"
+rust-version = "1.95"
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+wasm-bindgen = "0.2"
+js-sys = "0.3"
+serde-wasm-bindgen = "0.6"
+base64 = "0.22"
+sha2 = { version = "0.10", features = ["oid"] }
+hmac = "0.12"
+rsa = "0.9"
+pem = "3.0"
+getrandom = { version = "0.2", features = ["js"] }
+
+[profile.release]
+lto = "thin"
+strip = true

@@ -1,0 +1,67 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Rust, security semantics, and WASM
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Install Rust and WebAssembly target
+        run: |
+          rustup toolchain install 1.95.0 --profile minimal --component clippy,rustfmt --no-self-update
+          rustup target add wasm32-unknown-unknown --toolchain 1.95.0
+
+      - name: Check formatting
+        env:
+          RUSTUP_TOOLCHAIN: 1.95.0
+        run: cargo fmt --all -- --check
+
+      - name: Run all feature tests
+        env:
+          RUSTUP_TOOLCHAIN: 1.95.0
+        run: cargo test --workspace --all-features
+
+      - name: Run strict Clippy
+        env:
+          RUSTUP_TOOLCHAIN: 1.95.0
+        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+
+      - name: Install cargo-audit
+        run: cargo +1.95.0 install cargo-audit --version 0.22.1 --locked
+
+      - name: Audit Rust dependencies
+        env:
+          RUSTUP_TOOLCHAIN: 1.95.0
+        run: bash scripts/audit.sh
+
+      - name: Check WebAssembly compilation
+        env:
+          RUSTUP_TOOLCHAIN: 1.95.0
+        run: cargo check -p jwt_inspector_web --target wasm32-unknown-unknown
+
+      - name: Install wasm-pack
+        run: cargo +1.95.0 install wasm-pack --version 0.15.0 --locked
+
+      - name: Run browser WebAssembly tests
+        env:
+          RUSTUP_TOOLCHAIN: 1.95.0
+        run: wasm-pack test --headless --chrome crates/jwt_inspector_web

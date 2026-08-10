@@ -1,0 +1,4 @@
+/target/
+/dist/
+/.playwright-cli/
+crates/jwt_inspector_web/static/pkg/

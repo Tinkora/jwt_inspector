@@ -1,0 +1,24 @@
+[package]
+name = "jwt_inspector_web"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+jwt_inspector_core = { path = "../jwt_inspector_core", features = ["verify"] }
+wasm-bindgen.workspace = true
+js-sys.workspace = true
+serde.workspace = true
+serde-wasm-bindgen.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"
