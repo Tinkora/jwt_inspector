@@ -46,7 +46,7 @@ jobs:
         run: cargo clippy --workspace --all-targets --all-features -- -D warnings
 
       - name: Install cargo-audit
-        run: cargo +1.95.0 install cargo-audit --version 0.22.1 --locked
+        run: cargo +1.95.0 install cargo-audit --version 0.22.2 --locked
 
       - name: Audit Rust dependencies
         env:
