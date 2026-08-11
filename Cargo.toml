@@ -20,7 +20,7 @@ base64 = "0.22"
 sha2 = { version = "0.10", features = ["oid"] }
 hmac = "0.12"
 rsa = "0.9"
-pem = "3.0"
+pem = "4.0"
 getrandom = { version = "0.2", features = ["js"] }
 
 [profile.release]
