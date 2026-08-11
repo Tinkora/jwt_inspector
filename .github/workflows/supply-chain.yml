@@ -1,0 +1,56 @@
+name: Supply chain
+
+'on':
+  schedule:
+    - cron: '23 4 * * 1'
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supply-chain-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rust-dependency-audit:
+    name: cargo-deny and cargo-audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install fixed audit tools
+        run: |
+          set -euo pipefail
+          rustup toolchain install 1.95.0 --profile minimal --no-self-update
+          cargo +1.95.0 install cargo-deny --version 0.20.2 --locked
+          cargo +1.95.0 install cargo-audit --version 0.22.2 --locked
+
+      - name: Run cargo-deny
+        run: cargo +1.95.0 deny check advisories bans licenses sources
+
+      - name: Run scoped cargo-audit
+        run: bash scripts/audit.sh
+
+  workflow-static-analysis:
+    name: zizmor
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Audit GitHub Actions
+        uses: zizmorcore/zizmor-action@3dc1ecc9bcb9e94e9b2c709687979e1298497054 # v0.6.2
+        with:
+          version: 1.29.0
+          collect: workflows
+          online-audits: false
+          advanced-security: false

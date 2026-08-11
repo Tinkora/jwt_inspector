@@ -1,0 +1,15 @@
+config:
+  MD009: false
+  MD013: false
+  MD022: false
+  MD024: false
+  MD032: false
+  MD033: false
+  MD040: false
+  MD041: false
+  MD060: false
+
+ignores:
+  - .playwright-cli/**
+  - dist/**
+  - target/**
