@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased]
+
+No unreleased changes.
+
+## [0.1.1] - 2026-08-11
+
+### Added
+
+- Independent release workflow with reproducible web archive packaging
+- SHA-256 checksums, SPDX SBOM, license evidence, and GitHub artifact attestations
+- Documentation quality and supply-chain workflows for the public repository
+
+### Changed
+
+- Release metadata is validated against workspace package versions and changelog sections
+
 ## [0.1.0] - 2026-08-11
 
 ### Added
@@ -19,3 +35,7 @@
 - One-click copy for header, payload, and signature sections
 - All computation in WASM; keys never leave the browser
 - Proposed tool schemas for programmatic JWT inspection; no MCP transport is bundled
+
+[Unreleased]: https://github.com/Tinkora/jwt_inspector/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/Tinkora/jwt_inspector/releases/tag/v0.1.1
+[0.1.0]: https://github.com/Tinkora/jwt_inspector/releases/tag/v0.1.0

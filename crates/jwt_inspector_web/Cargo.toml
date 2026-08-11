@@ -1,6 +1,6 @@
 [package]
 name = "jwt_inspector_web"
-version = "0.1.0"
+version.workspace = true
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
@@ -13,7 +13,7 @@ wasm-opt = false
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-jwt_inspector_core = { path = "../jwt_inspector_core", features = ["verify"] }
+jwt_inspector_core = { version = "0.1.1", path = "../jwt_inspector_core", features = ["verify"] }
 wasm-bindgen.workspace = true
 js-sys.workspace = true
 serde.workspace = true
