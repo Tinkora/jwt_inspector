@@ -2,6 +2,8 @@
 
 [English](README.md)
 
+[![在 Ko-fi 上支持 Tinkora](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/tinkora)
+
 浏览器本地运行的 JWT 检查器。它可以解码 header、payload 和签名片段，单独显示过期状态，并在用户主动提供密钥时验证 HS256 或 RS256 签名。所有计算都在 WASM 中完成，Token 和密钥不会上传。
 
 ## 功能
