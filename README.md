@@ -2,6 +2,8 @@
 
 [中文说明](README.zh-CN.md)
 
+[![Support Tinkora on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/tinkora)
+
 [![CI](https://github.com/Tinkora/jwt_inspector/actions/workflows/test.yml/badge.svg)](https://github.com/Tinkora/jwt_inspector/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 [![Rust 1.95+](https://img.shields.io/badge/rust-1.95%2B-orange.svg)](https://www.rust-lang.org)
